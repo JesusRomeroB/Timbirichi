@@ -5,8 +5,8 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     public static BoardManager Instance;
-    public int Width = 6;
-    public int Height = 6;
+    private int Width = 6;
+    private int Height = 6;
     public Point PointPrefab;
     public Line LinePrefab;
 
@@ -14,6 +14,9 @@ public class BoardManager : MonoBehaviour
 
     public int GetWidth => Width;
     public int GetHeight => Height;
+    [SerializeField] float boundingBoxPadding = 0.5f;
+    [SerializeField] float minimumOrthographicSize = 2f;
+    private List<Transform> targets = new List<Transform>();
     private void Awake()
     {
         Instance = this;
@@ -21,8 +24,13 @@ public class BoardManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Width = PlayerPrefs.GetInt("Size");
+        Debug.Log("Width " + Width);
+        Height = PlayerPrefs.GetInt("Size");
+        Debug.Log("Height " + Height);
         GenerateBoard();
     }
+
 
     private void GenerateBoard()
     {
@@ -31,7 +39,8 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < Width; j++)
             {
                 var pos = new Vector2(i, j);
-                Instantiate(PointPrefab, pos, Quaternion.identity);
+                var point = Instantiate(PointPrefab, pos, Quaternion.identity);
+                targets.Add(point.transform);
                 if (j != 0)
                 {
                     var pos2 = new Vector2(i, j - 0.5f);
@@ -52,6 +61,8 @@ public class BoardManager : MonoBehaviour
             }
         }
         var center = new Vector2((float)Height / 2 - 0.5f, (float)Width / 2 - 0.5f);
+        Rect boundingBox = CalculateTargetsBoundingBox();
+        Camera.main.orthographicSize = CalculateOrthographicSize(boundingBox);
         Camera.main.transform.position = new Vector3(center.x, center.y, -5);
     }
 
@@ -59,10 +70,38 @@ public class BoardManager : MonoBehaviour
     {
         GameManager.Instance.SwitchPlayer();
     }
-    
-    // Update is called once per frame
-    void Update()
-    {
 
+    Rect CalculateTargetsBoundingBox()
+    {
+        float minX = Mathf.Infinity;
+        float maxX = Mathf.NegativeInfinity;
+        float minY = Mathf.Infinity;
+        float maxY = Mathf.NegativeInfinity;
+
+        foreach (Transform target in targets)
+        {
+            Vector3 position = target.position;
+
+            minX = Mathf.Min(minX, position.x);
+            minY = Mathf.Min(minY, position.y);
+            maxX = Mathf.Max(maxX, position.x);
+            maxY = Mathf.Max(maxY, position.y);
+        }
+
+        return Rect.MinMaxRect(minX - boundingBoxPadding, maxY + boundingBoxPadding, maxX + boundingBoxPadding, minY - boundingBoxPadding);
+    }
+
+    float CalculateOrthographicSize(Rect boundingBox)
+    {
+        float orthographicSize = Camera.main.orthographicSize;
+        Vector3 topRight = new Vector3(boundingBox.x + boundingBox.width, boundingBox.y, 0f);
+        Vector3 topRightAsViewport = Camera.main.WorldToViewportPoint(topRight);
+
+        if (topRightAsViewport.x >= topRightAsViewport.y)
+            orthographicSize = Mathf.Abs(boundingBox.width) / Camera.main.aspect / 2f;
+        else
+            orthographicSize = Mathf.Abs(boundingBox.height) / 2f;
+
+        return Mathf.Clamp(orthographicSize, minimumOrthographicSize, Mathf.Infinity);
     }
 }

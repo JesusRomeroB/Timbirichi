@@ -218,11 +218,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf6670bfe9063b0498cc55571bca1569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 3
-  Height: 3
   PointPrefab: {fileID: 4867383577037994712, guid: 677dd7e6fe93ede4aa8ae96dfe63a038, type: 3}
   LinePrefab: {fileID: 6015186320716757389, guid: 99d82c88a51b1cd499401eff729e6de3, type: 3}
   SquarePrefab: {fileID: 8219172722689985790, guid: 8ac5fa22f3d6c954896a7e1cd66e18c5, type: 3}
+  boundingBoxPadding: 0.5
+  minimumOrthographicSize: 2
 --- !u!4 &390591683
 Transform:
   m_ObjectHideFlags: 0
@@ -277,8 +277,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Player 2: --'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fc4eb57a182474e40845e5159a6f3deb, type: 2}
+  m_sharedMaterial: {fileID: 7836336513676856338, guid: fc4eb57a182474e40845e5159a6f3deb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -502,7 +502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -614,8 +614,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Player 1: --'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fc4eb57a182474e40845e5159a6f3deb, type: 2}
+  m_sharedMaterial: {fileID: 7836336513676856338, guid: fc4eb57a182474e40845e5159a6f3deb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
